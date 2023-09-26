@@ -1,0 +1,9 @@
+{
+    "signIn": {
+        "pageName": "Sign in",
+        "email": "Email",
+        "password": "Password",
+        "forgotPassword": "Forgot password?",
+        "bottomButtonText": "Sign in"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "home": {
+        "popularActorsTitle": "Trending actors",
+        "topRatedMoviesTitle": "Top rated"
+    },
+    "search": {
+        "pageName": "Search"
+    },
+    "favorites": {
+        "pageName": "Favorites"
+    },
+    "profile": {
+        "pageName": "My profile"
+    }
+}

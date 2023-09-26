@@ -1,111 +1,151 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+// import NetInfo from '@react-native-community/netinfo';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import AuthNavigator from './src/navigation/AuthNavigator';
+import { LoadingIndicator } from './src/components/loadingIndicator/LoadingIndicator';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import { InfoIcon } from './src/assets/icons';
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+import { AppColors, GlobalStyles } from './src/theme';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+import { setLanguage } from './src/utils/languageUtils';
+import { AsyncStorageKeys } from './src/utils/constants';
+import { getAsyncStorageParsedData } from './src/utils/utils';
+import { currentRouteName, navigationRef } from './navigation';
+import { getData, overwriteData } from './src/utils/asyncStorageManager';
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+import FlashMessage, { showMessage, hideMessage } from "react-native-flash-message";
+
+const Stack = createStackNavigator()
+
+class App extends React.Component {
+  state = {
+    loading: true,
+    signedIn: false
+  }
+
+  _isNotMounted = true;
+  isNetworkConnected = false;
+  unsubscribe = null;
+
+  async componentDidMount() {
+    await setLanguage();
+    // this.addListenerToConnection();  // WILL_BE implemented in the future
+    this.initData();
+  }
+
+  // WILL_BE implemented in the future
+  // componentWillUnmount() {
+  //   if (this.unsubscribe != null) this.unsubscribe();
+  // }
+
+  // WILL_BE implemented in the future
+  // addListenerToConnection = () => {
+  //   this.unsubscribe = NetInfo.addEventListener(async state => {
+  //     const currentSceneName = currentRouteName();
+  //     if (state.isConnected && state.isInternetReachable) {
+  //       if (!this.isNetworkConnected && !this._isNotMounted) {
+  //         // navigationRefReset(currentSceneName);
+  //       }
+  //       this.isNetworkConnected = true;
+  //       this._isNotMounted = false;
+  //     } else if (this.isNetworkConnected) {
+  //       this.isNetworkConnected = false;
+  //       this.showNoNetworkConnectionMessage();
+  //     } else if (!state.isConnected && this._isNotMounted) {
+  //       this.showNoNetworkConnectionMessageFromLaunchOfflineState();
+  //     }
+  //   });
+  // }
+
+  render() {
+    const { loading, signedIn } = this.state;
+    return (
+      <SafeAreaProvider >
+        <NavigationContainer ref={navigationRef}>
+          {this.renderContent(loading, signedIn)}
+          <FlashMessage
+            position="top"
+            renderFlashMessageIcon={() => <InfoIcon />}
+          />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+  }
+
+  renderContent = (loading: boolean, signedIn: boolean) => {
+    if (loading) return <LoadingIndicator />;
+    return <AuthNavigator signedIn={true} />;
+  }
+
+  showNoNetworkConnectionMessage = () => {
+    showMessage({
+      message: 'No internet connection',
+      type: "danger",
+      backgroundColor: AppColors.white,
+      color: AppColors.black,
+      icon: {
+        icon: "danger",
+        position: "left",
+        props: {}
+      },
+      titleStyle: styles.noConnectionTitle,
+      style: styles.noConnectionContent,
+      duration: 7000,
+      autoHide: false,
+      hideOnPress: true
+    })
+  }
+
+  // WILL_BE implemented in the future
+  // showNoNetworkConnectionMessageFromLaunchOfflineState = () => {
+  //   setTimeout(() => {
+  //     NetInfo.fetch().then(state => {
+  //       if (!state.isConnected && !state.isInternetReachable) {
+  //         this.showNoNetworkConnectionMessage();
+  //         this._isNotMounted = false;
+  //       }
+  //     })
+  //   }, 500)
+  // }
+
+
+  initData = async () => {
+    const userData = await getAsyncStorageParsedData(AsyncStorageKeys.user);
+    this.setState({ loading: false, signedIn: !!userData });
+  }
+
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  noConnectionTitle: {
+    marginLeft: 16,
+    fontSize: RFValue(14),
+    color: AppColors.black
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  noConnectionContent: {
+    borderBottomWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomColor: AppColors.appGray
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  notificationContent: {
+    borderRadius: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    elevation: 2,
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.05,
+    shadowColor: AppColors.white,
+    backgroundColor: AppColors.appGrayLighter,
   },
 });
 

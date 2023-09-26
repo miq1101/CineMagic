@@ -1,0 +1,12 @@
+{
+    "movieDetails": {
+        "releaseDateText": "Release date",
+        "movieDurationText": "Duration",
+        "movieDurationSuffix": "min.",
+        "movieBudgetText": "Budget",
+        "movieOverviewText": "OverView",
+        "movieGenreText": "Genre",
+        "topBilledCast": "Top Billed Cast",
+        "recommendations": "Recommendations"
+    }
+}

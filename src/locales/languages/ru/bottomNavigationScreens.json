@@ -1,0 +1,15 @@
+{
+    "home": {
+        "popularActorsTitle": "Трендовые актеры",
+        "topRatedMoviesTitle": "Популярные"
+    },
+    "search": {
+        "pageName": "Поиск"
+    },
+    "favorites": {
+        "pageName": "Избранное"
+    },
+    "profile": {
+        "pageName": "Профиль"
+    }
+}

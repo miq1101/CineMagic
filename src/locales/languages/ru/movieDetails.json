@@ -1,0 +1,12 @@
+{
+    "movieDetails": {
+        "releaseDateText": "Дата выпуска",
+        "movieDurationText": "Продолжительность",
+        "movieDurationSuffix": "мин.",
+        "movieBudgetText": "Бюджет",
+        "movieOverviewText": "Обзор",
+        "movieGenreText": "Жанр",
+        "topBilledCast": "Актеры с самым высоким рейтингом",
+        "recommendations": "Рекомендации"
+    }
+}

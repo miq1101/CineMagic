@@ -1,0 +1,9 @@
+{
+    "signIn": {
+        "pageName": "Войти",
+        "email": "Эл. почта",
+        "password": "Пароль",
+        "forgotPassword": "Забыли пароль?",
+        "bottomButtonText": "Войти"
+    }
+}

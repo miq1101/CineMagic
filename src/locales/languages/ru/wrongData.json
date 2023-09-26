@@ -1,0 +1,8 @@
+{
+    "noConnection": {
+        "wrongDataContentTitle": "Нет подключения к сети",
+        "wrongDataContentDescription": "Убедитесь, что ваше устройство подключено к интернету, и повторите попытку.",
+        "wrongDataContentButtonText": "Повторить",
+        "messageText": "Сеть недоступна. Пожалуйста, попробуйте еще раз."
+    }
+}

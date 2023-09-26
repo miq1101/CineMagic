@@ -1,0 +1,8 @@
+{
+    "noConnection": {
+        "wrongDataContentTitle": "Something went wrong",
+        "wrongDataContentDescription": "Please make sure your device is connected to the internet and try again.",
+        "wrongDataContentButtonText": "Retry",
+        "messageText": "The internet connection appears to be offline. Please try again."
+    }
+}
